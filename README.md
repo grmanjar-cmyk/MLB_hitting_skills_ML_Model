@@ -1,46 +1,62 @@
 
-# Predicting Baseball Hitter Performance Using Component Skills
+# MLB Hitting Skills Model: Predicting xwOBA from Component Skills
 
-A machine learning project to predict a baseball player's future offensive performance (`xwOBA`) using a curated set of underlying "component skills" from Statcast.
+This repository contains a machine learning project that predicts a baseball player's future offensive performance using a curated set of underlying "component" hitting skills, rather than traditional batted ball outcome stats.
 
+![Modeled xwOBA vs. Actual xwOBA](modeled_vs_actual_xwOBA_plot.png)
+*A scatter plot showing the model's strong correlation between predicted (modeled) and actual xwOBA for the 2025 season.*
 
 ---
 
 ## Project Goal
 
-The idea for this project was to see if a holistic model built on a component hitting skills (bat speed, plate discipline, timing, barrel control, etc.) can more accurately predict future performance than a comprehensive statcast stat like barrel rate or average exit velocity.
+This project aims to build and evaluate a machine learning model that predicts a baseball player's future offensive performance, measured by **xwOBA** (Expected Weighted On-Base Average).
 
-## Data Source
-
-The dataset is an aggregated CSV of player-seasons from 2023-2025, sourced from [Baseball Savant](https://baseballsavant.mlb.com/statcast_search).
-
-**View the complete analysis in the Jupyter Notebook:** [notebooks/hitting_skill_ML.ipynb](notebooks/hitting_skill_ML.ipynb)
+The central hypothesis is that a model built on a curated set of underlying hitting "component skills" (like bat speed, plate discipline, and bat control) can be as predictive as more comprehensive statcast stats that take into account batted ball outcomes like launch angle and exit velocity.
 
 ---
 
-## Workflow
-
-1.  **Data Cleaning & Exploration:** Loaded the data and performed an initial exploratory data analysis (EDA), including a correlation matrix to understand the initial relationships between features.
-2.  **Feature Selection & Engineering:** Collaboratively selected a final set of 7 features to represent four key component skills. A new `discipline_ratio` feature (`Z-Swing% / O-Swing%`) was engineered to better capture a player's plate discipline.
-3.  **Time-Based Splitting:** The data was split chronologically to create a robust validation strategy:
-    *   **Training Set:** 2023-2024 Seasons
-    *   **Validation Set:** 2025 Season
-4.  **Modeling:** A Random Forest Regressor was trained on the training set to learn the complex, non-linear relationships between the component skills and the target variable (`xwOBA`).
-5.  **Evaluation & Benchmarking:** The model's performance was evaluated on the unseen 2025 validation data and benchmarked against simpler, single-feature Linear Regression models using more comprehensive statcast stats thought to be linked to hitting performance.
-
----
-
-## Key Results & Findings
+## Key Findings
 
 The final Random Forest model successfully predicted 2025 `xwOBA` with a **Root Mean Squared Error (RMSE) of 0.0199**.
 
-This result proved the initial hypothesis, as the model was **~7% more accurate** than the best-performing single-feature baseline model (which used `barrel_batted_rate` and had an RMSE of 0.0213).
+This result proved the initial hypothesis, as the model was approximately **7% more accurate** than the best-performing single-feature baseline model (which used `barrel_batted_rate`). The comprehensive analysis showed that the model is not only accurate but also robust and unbiased in its predictions.
 
-A key insight from the analysis was that some features with high event-level value (like `squared_up_contact`) have a low player-level correlation with `xwOBA`, highlighting the complex "Power vs. Contact" trade-offs that the machine learning model successfully learned.
+---
 
-## Technologies Used
-- Python
-- Pandas
-- Scikit-learn
-- Seaborn & Matplotlib
-- Jupyter Notebook
+## Process Overview
+
+The notebook follows a standard data science workflow:
+
+1.  **Data Loading & Inspection:** The dataset, sourced from Baseball Savant, contains aggregated player-season data from 2023 to 2025.
+2.  **Feature Selection & Engineering:** After analyzing the available metrics, a final set of 7 features was selected to represent four key component skills. A new `discipline_ratio` feature was engineered to better capture plate discipline.
+3.  **Model Training:** A Random Forest Regressor was trained on data from the 2023 and 2024 seasons.
+4.  **Model Evaluation:** The model's ability to predict future performance was tested on unseen data from the 2025 season.
+5.  **Baseline Comparison:** The final model's performance was benchmarked against simpler, single-feature models to validate its effectiveness.
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+This project uses Python 3.9+. All required libraries are listed in the `requirements.txt` file.
+
+### Installation
+
+1.  Clone the repository to your local machine:
+    ```bash
+    git clone https://github.com/your-username/your-repo-name.git
+    cd your-repo-name
+    ```
+
+2.  Install the necessary packages:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+### Usage
+
+To explore the analysis and model, open and run the Jupyter Notebook:
+```bash
+jupyter notebook hitting_skill_ML.ipynb
